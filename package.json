@@ -1,0 +1,18 @@
+{
+  "name": "dellertech-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "DellerTech portfolio monorepo (React client + Node/Express API)",
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n SERVER,CLIENT -c blue,magenta \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "seed:admin": "npm run seed:admin --prefix server",
+    "seed:projects": "npm run seed:projects --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4"
+  }
+}
