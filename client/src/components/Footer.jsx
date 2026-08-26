@@ -11,7 +11,6 @@ export default function Footer() {
           <Link to="/about" className="hover:text-white transition-colors">About</Link>
           <Link to="/projects" className="hover:text-white transition-colors">Projects</Link>
           <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
-          <Link to="/admin/login" className="hover:text-white transition-colors">Admin</Link>
         </div>
 
         <p className="text-sm text-slate-500">
