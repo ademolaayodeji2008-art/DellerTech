@@ -156,6 +156,56 @@ export default function About() {
           ))}
         </div>
       </section>
+
+      {/* Founder */}
+      <section className="bg-base-900 border-y border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <AnimatedSection>
+            <p className="uppercase tracking-[0.3em] text-xs font-semibold text-brand-gold mb-4 text-center">Meet the Founder</p>
+            <h2 className="section-heading text-center mb-14">The Person Behind DellerTech</h2>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="glass-card p-8 lg:p-12 max-w-4xl mx-auto">
+              <div className="flex flex-col lg:flex-row gap-10 items-center lg:items-start">
+                {/* Photo */}
+                <div className="flex-shrink-0">
+                  <div className="w-40 h-40 lg:w-52 lg:h-52 rounded-2xl overflow-hidden border-2 border-brand-blue/40 shadow-lg shadow-brand-blue/10">
+                    <img
+                      src="/owner.jpeg"
+                      alt="Ademola Ayodeji Fredrick — Founder of DellerTech"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                {/* Bio */}
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="text-2xl font-bold text-white mb-1">Ademola Ayodeji Fredrick</h3>
+                  <p className="text-brand-blue font-semibold text-sm uppercase tracking-wider mb-5">Founder &amp; Lead Developer</p>
+                  <div className="space-y-4 text-slate-400 leading-relaxed">
+                    <p>
+                      Ademola is a fullstack developer with 2+ years of hands-on experience designing and building modern web products. With a passion for clean code and great user experiences, he has delivered projects for businesses across multiple industries in Nigeria.
+                    </p>
+                    <p>
+                      His belief that technology should be both accessible and transformative led him to found DellerTech — a company that not only builds digital products for clients, but also runs a coding school to grow the next generation of Nigerian developers.
+                    </p>
+                    <p>
+                      When he&apos;s not writing code, he&apos;s teaching it.
+                    </p>
+                  </div>
+                  {/* Badges */}
+                  <div className="flex flex-wrap gap-3 mt-6 justify-center lg:justify-start">
+                    {["React", "Node.js", "MongoDB", "Fullstack Development", "Tech Education"].map((badge) => (
+                      <span key={badge} className="px-3 py-1 rounded-full text-xs font-semibold border border-brand-blue/30 text-brand-blue bg-brand-blue/5">
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
     </div>
   );
 }
