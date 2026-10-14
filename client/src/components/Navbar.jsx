@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import Logo from "./Logo.jsx";
 
 const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/services", label: "Services" },
   { to: "/projects", label: "Projects" },
   { to: "/contact", label: "Contact" },
 ];
@@ -27,7 +28,7 @@ export default function Navbar() {
                 end={link.to === "/"}
                 className={({ isActive }) =>
                   `text-sm font-medium transition-colors ${
-                    isActive ? "text-accent-cyan" : "text-slate-300 hover:text-white"
+                    isActive ? "text-brand-blue" : "text-slate-300 hover:text-white"
                   }`
                 }
               >
@@ -36,6 +37,15 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+
+        <div className="hidden md:flex items-center">
+          <Link
+            to="/contact"
+            className="btn-primary text-sm px-5 py-2"
+          >
+            Get a Quote
+          </Link>
+        </div>
 
         <button
           className="md:hidden text-slate-200 p-2"
@@ -53,24 +63,33 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <ul className="md:hidden flex flex-col gap-1 px-6 pb-4">
-          {links.map((link) => (
-            <li key={link.to}>
-              <NavLink
-                to={link.to}
-                end={link.to === "/"}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `block py-2 text-sm font-medium ${
-                    isActive ? "text-accent-cyan" : "text-slate-300"
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        <div className="md:hidden flex flex-col gap-1 px-6 pb-4 border-t border-white/10 pt-4">
+          <ul className="flex flex-col gap-1 mb-4">
+            {links.map((link) => (
+              <li key={link.to}>
+                <NavLink
+                  to={link.to}
+                  end={link.to === "/"}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) =>
+                    `block py-2 text-sm font-medium ${
+                      isActive ? "text-brand-blue" : "text-slate-300"
+                    }`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+          <Link
+            to="/contact"
+            onClick={() => setOpen(false)}
+            className="btn-primary text-sm text-center"
+          >
+            Get a Quote
+          </Link>
+        </div>
       )}
     </header>
   );
