@@ -114,7 +114,7 @@ export default function Home() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(37,99,235,0.6)";
+        ctx.fillStyle = "rgba(37,99,235,0.9)";
         ctx.fill();
       }
       // lines
@@ -124,12 +124,12 @@ export default function Home() {
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < MAX_DIST) {
-            const alpha = (1 - dist / MAX_DIST) * 0.15;
+            const alpha = (1 - dist / MAX_DIST) * 0.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.strokeStyle = `rgba(37,99,235,${alpha})`;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
           }
         }
@@ -256,7 +256,7 @@ export default function Home() {
             width: "220px",
             height: "100%",
             zIndex: 0,
-            opacity: 0.18,
+            opacity: 0.75,
             pointerEvents: "none",
           }}
         />
@@ -291,11 +291,11 @@ export default function Home() {
                 background: "rgba(13,17,23,0.85)",
                 fontFamily: "'Courier New', monospace",
                 fontSize: "11px",
-                border: "1px solid rgba(37,99,235,0.3)",
+                border: "1px solid rgba(37,99,235,0.7)",
                 borderRadius: "8px",
                 padding: "8px 12px",
-                color: "#c9d1d9",
-                opacity: 0.55,
+                color: "#e2e8f0",
+                opacity: 0.9,
                 pointerEvents: "none",
                 whiteSpace: "nowrap",
                 "--dur": duration,
@@ -311,18 +311,13 @@ export default function Home() {
         <div
           style={{
             background:
-              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)",
             pointerEvents: "none",
             position: "absolute",
             inset: 0,
             zIndex: 1,
           }}
         />
-
-        {/* Existing background overlays — moved after scan line, still below content */}
-        <div className="absolute inset-0 bg-base-950/80 pointer-events-none" style={{ zIndex: 1 }} />
-        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-glow-radial blur-3xl" style={{ zIndex: 1 }} />
-        <div className="absolute top-0 -right-32 h-96 w-96 rounded-full bg-glow-radial blur-3xl" style={{ zIndex: 1 }} />
 
         {/* Content — sits above all effects */}
         <div className="max-w-6xl mx-auto px-6 pt-28 pb-32 relative" style={{ zIndex: 2 }}>
