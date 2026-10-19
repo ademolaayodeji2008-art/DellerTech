@@ -75,3 +75,20 @@ body {
     @apply bg-white/[0.04] border border-brand-blue/20 rounded-2xl p-8 text-center;
   }
 }
+
+/* Terminal cursor blink */
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background-color: #58a6ff;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  flex-shrink: 0;
+  animation: termBlink 0.8s step-start infinite;
+}
+
+@keyframes termBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

@@ -81,6 +81,33 @@ export default function Home() {
       .catch(() => setFeatured([]));
   }, []);
 
+  // Terminal typing state
+  const PHRASES = [
+    'Building next-gen web products...',
+    'Training the next generation of developers...',
+    'Delivering results for Nigerian businesses...',
+  ];
+  const [termText, setTermText] = useState('');
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = PHRASES[phraseIdx];
+    const speed = isDeleting ? 40 : 70;
+    const timer = setTimeout(() => {
+      if (!isDeleting && termText === current) {
+        // Pause then start deleting
+        setTimeout(() => setIsDeleting(true), 1800);
+      } else if (isDeleting && termText === '') {
+        setIsDeleting(false);
+        setPhraseIdx((i) => (i + 1) % PHRASES.length);
+      } else {
+        setTermText(isDeleting ? current.slice(0, termText.length - 1) : current.slice(0, termText.length + 1));
+      }
+    }, speed);
+    return () => clearTimeout(timer);
+  }, [termText, phraseIdx, isDeleting]);
+
   return (
     <div>
       {/* Hero */}
@@ -114,15 +141,31 @@ export default function Home() {
             <span className="gradient-text">One Line at a Time.</span>
           </motion.h1>
 
-          <motion.p
+          <motion.div
             initial={{opacity: 0, y: 20}}
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.6, delay: 0.2}}
-            className="mt-6 text-lg text-slate-400 max-w-xl leading-relaxed"
+            className="mt-6"
           >
-            We build professional websites and web applications for businesses, and we run a
-            coding school that trains the next generation of Nigerian tech talent.
-          </motion.p>
+            <div
+              style={{background: '#0d1117',
+                border: '1px solid #30363d',
+                borderRadius: '8px',
+                padding: '14px 20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                fontFamily: "'Courier New', Courier, monospace",
+                fontSize: '0.95rem',
+                maxWidth: '100%',
+                overflow: 'hidden',}}
+            >
+              <span style={{color: '#3fb950', marginRight: '10px', fontWeight: 'bold', flexShrink: 0}}>$</span>
+              <span style={{color: '#c9d1d9', whiteSpace: 'nowrap', overflow: 'hidden', minWidth: 0}}>
+                {termText}
+              </span>
+              <span className="terminal-cursor" />
+            </div>
+          </motion.div>
 
           <motion.div
             initial={{opacity: 0, y: 20}}
