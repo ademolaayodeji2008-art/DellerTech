@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import ProjectCard from "../components/ProjectCard.jsx";
@@ -74,6 +74,117 @@ const trustedBy = ["Anther Consulting Limited", "Oma Midas Limited", "TAXONTIME"
 export default function Home() {
   const [featured, setFeatured] = useState([]);
 
+  // ── Canvas refs ──────────────────────────────────────────────────────────────
+  const particleCanvasRef = useRef(null);
+  const matrixCanvasRef = useRef(null);
+  const heroSectionRef = useRef(null);
+
+  // 1 — Particle Network
+  useEffect(() => {
+    const canvas = particleCanvasRef.current;
+    const section = heroSectionRef.current;
+    if (!canvas || !section) return;
+    const ctx = canvas.getContext("2d");
+    let rafId;
+    const PARTICLE_COUNT = 60;
+    const MAX_DIST = 120;
+
+    const resize = () => {
+      canvas.width = section.offsetWidth;
+      canvas.height = section.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5),
+      vy: (Math.random() - 0.5),
+      r: 2,
+    }));
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // move + bounce
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(37,99,235,0.6)";
+        ctx.fill();
+      }
+      // lines
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            const alpha = (1 - dist / MAX_DIST) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(37,99,235,${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+      rafId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  // 2 — Matrix Rain
+  useEffect(() => {
+    const canvas = matrixCanvasRef.current;
+    const section = heroSectionRef.current;
+    if (!canvas || !section) return;
+    const ctx = canvas.getContext("2d");
+    let rafId;
+    const W = 220;
+    const CHAR_SIZE = 14;
+    const CHARS = "01{}[]<>/=;.(";
+    const cols = Math.floor(W / CHAR_SIZE);
+
+    const resize = () => {
+      canvas.width = W;
+      canvas.height = section.offsetHeight;
+    };
+    resize();
+
+    const drops = Array.from({ length: cols }, () => Math.random() * -100);
+
+    const draw = () => {
+      const H = canvas.height;
+      ctx.fillStyle = "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = "#22c55e";
+      ctx.font = `${CHAR_SIZE}px monospace`;
+      for (let i = 0; i < cols; i++) {
+        const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+        ctx.fillText(char, i * CHAR_SIZE, drops[i] * CHAR_SIZE);
+        drops[i]++;
+        if (drops[i] * CHAR_SIZE > H && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+      }
+      rafId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
   useEffect(() => {
     api
       .get("/projects")
@@ -112,16 +223,109 @@ export default function Home() {
     <div>
       {/* Hero */}
       <section
+        ref={heroSectionRef}
         className="relative overflow-hidden"
-        style={{backgroundImage:
+        style={{
+          backgroundImage:
             "radial-gradient(circle, rgba(37,99,235,0.18) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",}}
+          backgroundSize: "28px 28px",
+        }}
       >
-        <div className="absolute inset-0 bg-base-950/80 pointer-events-none" />
-        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-glow-radial blur-3xl" />
-        <div className="absolute top-0 -right-32 h-96 w-96 rounded-full bg-glow-radial blur-3xl" />
+        {/* 1 — Particle Network canvas */}
+        <canvas
+          ref={particleCanvasRef}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
 
-        <div className="max-w-6xl mx-auto px-6 pt-28 pb-32 relative">
+        {/* 2 — Matrix Rain canvas */}
+        <canvas
+          ref={matrixCanvasRef}
+          className="matrix-canvas"
+          style={{
+            position: "absolute",
+            right: 0,
+            top: 0,
+            width: "220px",
+            height: "100%",
+            zIndex: 0,
+            opacity: 0.18,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* 4 — Floating Code Snippets */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
+            overflow: "hidden",
+          }}
+        >
+          {[
+            { text: "const app = express();",     top: "8%",  left: "3%",  duration: "7s",  delay: "0s"   },
+            { text: "useState([])",                top: "15%", left: "72%", duration: "9s",  delay: "1.5s" },
+            { text: "db.connect(MONGO_URI)",       top: "35%", left: "80%", duration: "11s", delay: "0.8s" },
+            { text: '<Route path="/api" />',       top: "55%", left: "5%",  duration: "8s",  delay: "2.2s" },
+            { text: "npm run build ✓",             top: "72%", left: "60%", duration: "13s", delay: "0.3s" },
+            { text: "res.json({ status: 'ok' })",  top: "80%", left: "18%", duration: "10s", delay: "3s"   },
+            { text: "import React from 'react'",   top: "25%", left: "55%", duration: "6s",  delay: "1s"   },
+            { text: "git push origin main",        top: "88%", left: "42%", duration: "14s", delay: "2s"   },
+          ].map(({ text, top, left, duration, delay }) => (
+            <span
+              key={text}
+              className="floating-code"
+              style={{
+                position: "absolute",
+                top,
+                left,
+                background: "rgba(13,17,23,0.85)",
+                fontFamily: "'Courier New', monospace",
+                fontSize: "11px",
+                border: "1px solid rgba(37,99,235,0.3)",
+                borderRadius: "8px",
+                padding: "8px 12px",
+                color: "#c9d1d9",
+                opacity: 0.55,
+                pointerEvents: "none",
+                whiteSpace: "nowrap",
+                "--dur": duration,
+                animationDelay: delay,
+              }}
+            >
+              {text}
+            </span>
+          ))}
+        </div>
+
+        {/* 5 — Scan Line overlay */}
+        <div
+          style={{
+            background:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+            pointerEvents: "none",
+            position: "absolute",
+            inset: 0,
+            zIndex: 1,
+          }}
+        />
+
+        {/* Existing background overlays — moved after scan line, still below content */}
+        <div className="absolute inset-0 bg-base-950/80 pointer-events-none" style={{ zIndex: 1 }} />
+        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-glow-radial blur-3xl" style={{ zIndex: 1 }} />
+        <div className="absolute top-0 -right-32 h-96 w-96 rounded-full bg-glow-radial blur-3xl" style={{ zIndex: 1 }} />
+
+        {/* Content — sits above all effects */}
+        <div className="max-w-6xl mx-auto px-6 pt-28 pb-32 relative" style={{ zIndex: 2 }}>
           <motion.p
             initial={{opacity: 0, y: 10}}
             animate={{opacity: 1, y: 0}}
@@ -135,7 +339,7 @@ export default function Home() {
             initial={{opacity: 0, y: 20}}
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.6, delay: 0.1}}
-            className="text-4xl sm:text-6xl font-extrabold text-white leading-tight max-w-3xl"
+            className="text-4xl sm:text-6xl font-extrabold text-white leading-tight max-w-3xl glitch-text"
           >
             Building the Future,{" "}
             <span className="gradient-text">One Line at a Time.</span>

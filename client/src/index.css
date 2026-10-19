@@ -205,3 +205,37 @@ body {
     display: none;
   }
 }
+
+/* ── Hero coding animations ─────────────────────────────────────────────────── */
+
+/* Matrix rain: hide on mobile */
+@media (max-width: 768px) {
+  .matrix-canvas {
+    display: none;
+  }
+}
+
+/* Glitch intro animation */
+.glitch-text {
+  animation: glitchIn 0.8s ease-out forwards;
+}
+@keyframes glitchIn {
+  0%   { transform: skewX(0deg);  opacity: 0;   filter: blur(4px); }
+  20%  { transform: skewX(-8deg); opacity: 0.8; filter: blur(1px); clip-path: inset(20% 0 40% 0); }
+  40%  { transform: skewX(6deg);  opacity: 1;   filter: blur(0px); clip-path: inset(0% 0 0% 0); }
+  60%  { transform: skewX(-3deg); }
+  80%  { transform: skewX(1deg); }
+  100% { transform: skewX(0deg);  opacity: 1;   filter: none; }
+}
+
+/* Floating code snippets */
+.floating-code {
+  animation: floatCode var(--dur, 9s) ease-in-out infinite;
+}
+@keyframes floatCode {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-18px); }
+}
+@media (max-width: 640px) {
+  .floating-code { display: none; }
+}
