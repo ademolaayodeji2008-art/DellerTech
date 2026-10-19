@@ -113,6 +113,46 @@ export default function Services() {
         </div>
       </section>
 
+      {/* Before & After Comparison */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <AnimatedSection>
+          <div className="text-center mb-10">
+            <h2 className="section-heading">
+              See the Difference{" "}
+              <span className="gradient-text">We Make</span>
+            </h2>
+          </div>
+          <div className="ba-container">
+            {/* Before panel */}
+            <div className="ba-panel ba-before">
+              <div className="ba-content">
+                <h3 className="ba-heading">⚠️ Without DellerTech</h3>
+                <ul className="ba-list">
+                  <li>Slow load times</li>
+                  <li>Outdated design</li>
+                  <li>Poor mobile experience</li>
+                  <li>Low search rankings</li>
+                </ul>
+              </div>
+            </div>
+            {/* After panel */}
+            <div className="ba-panel ba-after">
+              <div className="ba-content">
+                <h3 className="ba-heading">🚀 With DellerTech</h3>
+                <ul className="ba-list">
+                  <li>Lightning-fast performance</li>
+                  <li>Modern professional design</li>
+                  <li>Fully responsive</li>
+                  <li>SEO optimised</li>
+                </ul>
+              </div>
+            </div>
+            {/* Hover label */}
+            <div className="ba-label">HOVER TO REVEAL →</div>
+          </div>
+        </AnimatedSection>
+      </section>
+
       {/* Service Cards Grid */}
       <section className="max-w-6xl mx-auto px-6 py-24">
         <div className="grid lg:grid-cols-2 gap-8">
