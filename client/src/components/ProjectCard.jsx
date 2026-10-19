@@ -3,10 +3,12 @@ import SkillBadge from "./SkillBadge.jsx";
 
 export default function ProjectCard({ project }) {
   return (
+    <div style={{ perspective: '1000px' }} className="group/tilt">
     <motion.article
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -8, rotateX: 6, rotateY: -6, boxShadow: '-12px 12px 30px rgba(0,0,0,0.5), 0 0 20px rgba(37,99,235,0.3)' }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="glass-card overflow-hidden flex flex-col group"
+      style={{ transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease' }}
+      className="glass-card overflow-hidden flex flex-col group group-hover/tilt:border-brand-blue/40"
     >
       <div className="h-48 overflow-hidden bg-base-800 relative">
         {project.imageUrl ? (
@@ -64,5 +66,6 @@ export default function ProjectCard({ project }) {
         </div>
       </div>
     </motion.article>
+    </div>
   );
 }
