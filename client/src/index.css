@@ -12,11 +12,21 @@ body {
     radial-gradient(circle at 15% 0%, rgba(37, 99, 235, 0.10) 0%, transparent 45%),
     radial-gradient(circle at 85% 20%, rgba(245, 158, 11, 0.07) 0%, transparent 45%);
   background-attachment: fixed;
+  cursor: none !important;
 }
 
 ::selection {
   background: rgba(37, 99, 235, 0.35);
   color: #fff;
+}
+
+a, button {
+  cursor: none !important;
+}
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {

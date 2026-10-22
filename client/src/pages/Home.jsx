@@ -5,6 +5,46 @@ import ProjectCard from "../components/ProjectCard.jsx";
 import AnimatedSection from "../components/AnimatedSection.jsx";
 import api from "../api/client.js";
 
+function SpotlightCard({ children }) {
+  const [spot, setSpot] = useState({ x: 0, y: 0, show: false });
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const rect = cardRef.current.getBoundingClientRect();
+    setSpot({ x: e.clientX - rect.left, y: e.clientY - rect.top, show: true });
+  };
+
+  const handleMouseLeave = () => {
+    setSpot((s) => ({ ...s, show: false }));
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      className="service-card h-full spotlight-card"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ position: 'relative', overflow: 'hidden' }}
+    >
+      {/* Spotlight overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: 'inherit',
+          pointerEvents: 'none',
+          transition: 'opacity 0.3s ease',
+          opacity: spot.show ? 1 : 0,
+          background: `radial-gradient(circle 180px at ${spot.x}px ${spot.y}px, rgba(37,99,235,0.12), transparent)`,
+          zIndex: 0,
+        }}
+      />
+      {/* Content sits above overlay */}
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
+    </div>
+  );
+}
+
 const services = [
   {
     icon: (
@@ -73,6 +113,45 @@ const trustedBy = ["Anther Consulting Limited", "Oma Midas Limited", "TAXONTIME"
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
+
+  // ── Stats counter ─────────────────────────────────────────────────────────────
+  const statsRef = useRef(null);
+  const [statCounts, setStatCounts] = useState([0, 0, 0]);
+  const statsAnimated = useRef(false);
+
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsAnimated.current) {
+          statsAnimated.current = true;
+          observer.disconnect();
+          stats.forEach((s, i) => {
+            const target = parseInt(s.value);
+            const duration = 2000;
+            const start = performance.now();
+            const tick = (now) => {
+              const elapsed = now - start;
+              const t = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - t, 3);
+              const current = Math.floor(eased * target);
+              setStatCounts((prev) => {
+                const next = [...prev];
+                next[i] = current;
+                return next;
+              });
+              if (t < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          });
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // ── Canvas refs ──────────────────────────────────────────────────────────────
   const particleCanvasRef = useRef(null);
@@ -393,13 +472,13 @@ export default function Home() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((svc, i) => (
             <AnimatedSection key={svc.name} delay={i * 0.07}>
-              <div className="service-card h-full">
+              <SpotlightCard>
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-blue/10 text-brand-blue mb-5">
                   {svc.icon}
                 </div>
                 <h3 className="text-white font-bold text-lg mb-2">{svc.name}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{svc.desc}</p>
-              </div>
+              </SpotlightCard>
             </AnimatedSection>
           ))}
         </div>
@@ -414,7 +493,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose DellerTech */}
-      <section className="bg-base-900 border-y border-white/10">
+      <section ref={statsRef} className="bg-base-900 border-y border-white/10">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <AnimatedSection>
             <h2 className="section-heading text-center mb-14">Why Choose DellerTech?</h2>
@@ -423,7 +502,9 @@ export default function Home() {
             {stats.map((s, i) => (
               <AnimatedSection key={s.label} delay={i * 0.1}>
                 <div className="stat-card">
-                  <p className="text-5xl font-extrabold text-brand-blue mb-3">{s.value}</p>
+                  <p className="text-5xl font-extrabold text-brand-blue mb-3">
+                    {statCounts[i]}{s.value.replace(/[0-9]/g, '')}
+                  </p>
                   <p className="text-slate-300 font-medium">{s.label}</p>
                 </div>
               </AnimatedSection>

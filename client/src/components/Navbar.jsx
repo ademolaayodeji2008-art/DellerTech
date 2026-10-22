@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import Logo from "./Logo.jsx";
 
@@ -12,9 +12,20 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? (scrollY / docHeight) * 100 : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-base-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 relative border-b border-white/10 bg-base-950/80 backdrop-blur-xl">
       <nav className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <NavLink to="/" onClick={() => setOpen(false)}>
           <Logo size="sm" />
@@ -91,6 +102,18 @@ export default function Navbar() {
           </Link>
         </div>
       )}
+
+      {/* Scroll progress bar */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '3px', background: 'transparent' }}>
+        <div
+          style={{
+            height: '100%',
+            width: `${scrollProgress}%`,
+            background: 'linear-gradient(90deg, #2563EB, #F59E0B)',
+            transition: 'width 0.1s linear',
+          }}
+        />
+      </div>
     </header>
   );
 }

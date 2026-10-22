@@ -2,6 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import CustomCursor from "./components/CustomCursor.jsx";
+import BackToTop from "./components/BackToTop.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Projects from "./pages/Projects.jsx";
@@ -13,6 +15,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
+      <CustomCursor />
+      <BackToTop />
       <Navbar />
       <main className="flex-1">
         <Routes>
