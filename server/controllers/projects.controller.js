@@ -82,3 +82,13 @@ export async function deleteProject(req, res) {
   await project.deleteOne();
   res.json({ message: "Project deleted." });
 }
+
+export async function getProjectStats(req, res) {
+  const [total, featured, recent] = await Promise.all([
+    Project.countDocuments(),
+    Project.countDocuments({ featured: true }),
+    Project.find().sort({ createdAt: -1 }).limit(5).select('_id title featured createdAt'),
+  ]);
+
+  res.json({ total, featured, recent });
+}

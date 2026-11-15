@@ -5,6 +5,7 @@ import {
   createProject,
   updateProject,
   deleteProject,
+  getProjectStats,
 } from "../controllers/projects.controller.js";
 import { requireAuth } from "../middleware/auth.js";
 import { upload } from "../middleware/upload.js";
@@ -12,6 +13,7 @@ import { upload } from "../middleware/upload.js";
 const router = Router();
 
 router.get("/", listProjects);
+router.get("/stats", requireAuth, getProjectStats);
 router.get("/:id", getProject);
 
 router.post("/", requireAuth, upload.single("image"), createProject);

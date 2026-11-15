@@ -43,3 +43,40 @@ export async function deleteMessage(req, res) {
   await Message.findByIdAndDelete(req.params.id);
   res.json({ message: "Deleted." });
 }
+
+export async function getMessageStats(req, res) {
+  const [total, newCount, readCount, repliedCount, general, project, school] = await Promise.all([
+    Message.countDocuments({}),
+    Message.countDocuments({ status: 'new' }),
+    Message.countDocuments({ status: 'read' }),
+    Message.countDocuments({ status: 'replied' }),
+    Message.countDocuments({ category: 'general' }),
+    Message.countDocuments({ category: 'project' }),
+    Message.countDocuments({ category: 'school' }),
+  ]);
+
+  res.json({
+    total,
+    newCount,
+    readCount,
+    repliedCount,
+    byCategory: { general, project, school },
+  });
+}
+
+export async function updateMessage(req, res) {
+  const { status, category, adminNote } = req.body;
+
+  const $set = {};
+  if (status !== undefined) $set.status = status;
+  if (category !== undefined) $set.category = category;
+  if (adminNote !== undefined) $set.adminNote = adminNote;
+
+  const msg = await Message.findByIdAndUpdate(
+    req.params.id,
+    { $set },
+    { new: true }
+  );
+  if (!msg) return res.status(404).json({ message: "Message not found." });
+  res.json(msg);
+}
