@@ -1,6 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
-import { createMessage } from "../controllers/contact.controller.js";
+import { createMessage, getMessages, markRead, deleteMessage } from "../controllers/contact.controller.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -13,5 +14,8 @@ const contactLimiter = rateLimit({
 });
 
 router.post("/", contactLimiter, createMessage);
+router.get("/", requireAuth, getMessages);
+router.patch("/:id/read", requireAuth, markRead);
+router.delete("/:id", requireAuth, deleteMessage);
 
 export default router;

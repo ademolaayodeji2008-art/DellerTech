@@ -23,3 +23,23 @@ export async function createMessage(req, res) {
 
   res.status(201).json({ message: "Thanks — your message has been sent.", id: saved._id });
 }
+
+export async function getMessages(req, res) {
+  const messages = await Message.find().sort({ createdAt: -1 });
+  res.json(messages);
+}
+
+export async function markRead(req, res) {
+  const msg = await Message.findByIdAndUpdate(
+    req.params.id,
+    { read: true },
+    { new: true }
+  );
+  if (!msg) return res.status(404).json({ message: "Message not found." });
+  res.json(msg);
+}
+
+export async function deleteMessage(req, res) {
+  await Message.findByIdAndDelete(req.params.id);
+  res.json({ message: "Deleted." });
+}
