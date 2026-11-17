@@ -645,7 +645,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col items-center gap-4">
               <div className="bg-white p-3 rounded-xl inline-block">
                 <img
-                  src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=https%3A%2F%2Fdellertech.com.ng%2Fcard&choe=UTF-8"
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fdellertech.com.ng%2Fcard&bgcolor=ffffff&color=000000&margin=2"
                   alt="QR Code — dellertech.com.ng/card"
                   width={200}
                   height={200}
@@ -659,7 +659,7 @@ export default function AdminDashboard() {
                 onClick={async () => {
                   try {
                     const response = await fetch(
-                      "https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl=https%3A%2F%2Fdellertech.com.ng%2Fcard&choe=UTF-8"
+                      "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fdellertech.com.ng%2Fcard&bgcolor=ffffff&color=000000&margin=2"
                     );
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
