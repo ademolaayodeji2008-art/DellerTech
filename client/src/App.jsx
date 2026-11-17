@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -11,8 +11,20 @@ import Contact from "./pages/Contact.jsx";
 import Services from "./pages/Services.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import Card from "./pages/Card.jsx";
 
 export default function App() {
+  const location = useLocation();
+  const isCardPage = location.pathname === "/card";
+
+  if (isCardPage) {
+    return (
+      <Routes>
+        <Route path="/card" element={<Card />} />
+      </Routes>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <CustomCursor />

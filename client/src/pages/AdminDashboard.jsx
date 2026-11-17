@@ -635,6 +635,50 @@ export default function AdminDashboard() {
       {/* ── Settings Tab ── */}
       {tab === "settings" && (
         <AnimatedSection>
+          {/* QR Code section */}
+          <div className="glass-card p-6 mb-6">
+            <h2 className="text-lg font-bold text-white mb-2">Your QR Code</h2>
+            <p className="text-sm text-slate-400 mb-5">
+              Share this QR code on your business card, social media, or printed materials.
+              When scanned, it opens your digital business card.
+            </p>
+            <div className="flex flex-col items-center gap-4">
+              <div className="bg-white p-3 rounded-xl inline-block">
+                <img
+                  src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=https%3A%2F%2Fdellertech.com.ng%2Fcard&choe=UTF-8"
+                  alt="QR Code — dellertech.com.ng/card"
+                  width={200}
+                  height={200}
+                  className="block"
+                />
+              </div>
+              <p className="text-xs text-slate-500 text-center">
+                Encodes: https://dellertech.com.ng/card
+              </p>
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch(
+                      "https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl=https%3A%2F%2Fdellertech.com.ng%2Fcard&choe=UTF-8"
+                    );
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "dellertech-qrcode.png";
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  } catch {
+                    alert("Download failed. Right-click the QR code image and choose Save Image.");
+                  }
+                }}
+                className="btn-primary"
+              >
+                Download QR Code
+              </button>
+            </div>
+          </div>
+
           {/* Site Info card */}
           <div className="glass-card p-6 mb-6">
             <h2 className="text-lg font-bold text-white mb-4">Site Information</h2>
