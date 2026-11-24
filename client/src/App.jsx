@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import BackToTop from "./components/BackToTop.jsx";
+import IntroScreen from "./components/IntroScreen.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Projects from "./pages/Projects.jsx";
@@ -17,6 +19,10 @@ export default function App() {
   const location = useLocation();
   const isCardPage = location.pathname === "/card";
 
+  const [introComplete, setIntroComplete] = useState(
+    () => !!sessionStorage.getItem('dt_intro_seen')
+  );
+
   if (isCardPage) {
     return (
       <Routes>
@@ -27,6 +33,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {!introComplete && <IntroScreen onComplete={() => setIntroComplete(true)} />}
       <CustomCursor />
       <BackToTop />
       <Navbar />

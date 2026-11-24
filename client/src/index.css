@@ -216,6 +216,58 @@ a, button {
   }
 }
 
+/* === Intro Screen === */
+@keyframes noise {
+  0%   { background-position: 0 0, 0 0; }
+  10%  { background-position: -5% -10%, 15% 5%; }
+  20%  { background-position: -15% 5%, -5% -15%; }
+  30%  { background-position: 7% -25%, 20% 10%; }
+  40%  { background-position: -5% 25%, -15% 5%; }
+  50%  { background-position: -15% 10%, 15% -5%; }
+  60%  { background-position: 15% 0%, 0% 15%; }
+  70%  { background-position: 0% 15%, 20% -10%; }
+  80%  { background-position: -10% 0%, 10% 5%; }
+  90%  { background-position: 5% -5%, -5% 10%; }
+  100% { background-position: 0% 0%, 0% 0%; }
+}
+
+@keyframes rgbSplit {
+  0%,100% { text-shadow: none; transform: none; }
+  20% { text-shadow: -4px 0 #ff0000, 4px 0 #0000ff; transform: skewX(-2deg); }
+  40% { text-shadow: 4px 0 #ff0000, -4px 0 #0000ff; transform: skewX(2deg); }
+  60% { text-shadow: -2px 0 #ff0000, 2px 0 #0000ff; transform: skewX(-1deg); }
+  80% { text-shadow: 2px 0 #ff0000, -2px 0 #0000ff; transform: skewX(1deg); }
+}
+
+@keyframes scanSweep {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes flashWhite {
+  0%,100% { opacity: 0; }
+  25%,75% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.intro-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: #22c55e;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: termBlink 0.6s step-start infinite;
+}
+
+.intro-glitch {
+  animation: rgbSplit 0.15s ease infinite;
+}
+
+.intro-glitch-text {
+  animation: rgbSplit 0.2s ease 3;
+}
+
 /* ── Hero coding animations ─────────────────────────────────────────────────── */
 
 /* Matrix rain: hide on mobile */
